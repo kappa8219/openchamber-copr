@@ -1,4 +1,5 @@
 %global debug_package %{nil}
+%global bun_version 1.4.2
 
 Name:           openchamber
 Version:        2.1.1
@@ -7,9 +8,9 @@ Summary:        Desktop runtime for OpenChamber
 License:        MIT
 URL:            https://openchamber.dev/
 Source0:        https://github.com/openchamber/openchamber/archive/refs/tags/v%{version}.tar.gz
+Source1:        https://github.com/oven-sh/bun/releases/download/bun-v%{bun_version}/bun-linux-x64.zip
 ExclusiveArch:  x86_64
 
-BuildRequires:  bun
 BuildRequires:  cpio
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
@@ -19,6 +20,7 @@ BuildRequires:  nodejs
 BuildRequires:  npm
 BuildRequires:  python3
 BuildRequires:  rpm
+BuildRequires:  unzip
 
 %description
 OpenChamber is an open-source desktop client for OpenCode.
@@ -31,6 +33,9 @@ export HOME="%{_builddir}/home"
 export npm_config_cache="%{_builddir}/npm-cache"
 export ELECTRON_BUILDER_CACHE="%{_builddir}/electron-builder-cache"
 mkdir -p "$HOME" "$npm_config_cache" "$ELECTRON_BUILDER_CACHE"
+unzip -q %{SOURCE1}
+export PATH="$PWD/bun-linux-x64:$PATH"
+bun --version
 bun install --frozen-lockfile
 bun run build
 bun run --cwd packages/electron package -- --linux rpm --x64
