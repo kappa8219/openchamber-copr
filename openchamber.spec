@@ -1,9 +1,10 @@
 %global debug_package %{nil}
 %global bun_version 1.4.2
+%global __requires_exclude_from ^/opt/OpenChamber/resources/app\.asar\.unpacked/.*$
 
 Name:           openchamber
 Version:        2.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Desktop runtime for OpenChamber
 License:        MIT
 URL:            https://openchamber.dev/
