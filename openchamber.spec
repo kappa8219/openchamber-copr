@@ -52,6 +52,7 @@ node --input-type=module -e '
 bun run --cwd packages/electron package -- --linux rpm --x64
 
 %install
+export QA_RPATHS=0x12
 mkdir -p "%{buildroot}"
 rpm2cpio packages/electron/dist/OpenChamber-%{version}-linux-x86_64.rpm | (
     cd "%{buildroot}"
