@@ -32,6 +32,7 @@ OpenChamber is an open-source desktop client for OpenCode.
 export HOME="%{_builddir}/home"
 export npm_config_cache="%{_builddir}/npm-cache"
 export ELECTRON_BUILDER_CACHE="%{_builddir}/electron-builder-cache"
+export NODE_OPTIONS="--max-old-space-size=4096"
 mkdir -p "$HOME" "$npm_config_cache" "$ELECTRON_BUILDER_CACHE"
 unzip -q %{SOURCE1}
 export PATH="$PWD/bun-linux-x64:$PATH"
