@@ -39,11 +39,20 @@ export PATH="$PWD/bun-linux-x64:$PATH"
 bun --version
 bun install --frozen-lockfile
 bun run build
+node --input-type=module -e '
+  import fs from "node:fs";
+  const path = "packages/electron/package.json";
+  const packageJson = JSON.parse(fs.readFileSync(path, "utf8"));
+  packageJson.homepage = "https://openchamber.dev/";
+  packageJson.author = { name: "OpenChamber COPR", email: "noreply@github.com" };
+  packageJson.build.linux.maintainer = "OpenChamber COPR <noreply@github.com>";
+  fs.writeFileSync(path, `${JSON.stringify(packageJson, null, 2)}\n`);
+'
 bun run --cwd packages/electron package -- --linux rpm --x64
 
 %install
 mkdir -p "%{buildroot}"
-rpm2cpio packages/electron/dist/OpenChamber-%{version}-x86_64.rpm | (
+rpm2cpio packages/electron/dist/OpenChamber-%{version}-linux-x86_64.rpm | (
     cd "%{buildroot}"
     cpio -idm
 )
