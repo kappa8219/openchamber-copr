@@ -1,0 +1,71 @@
+name: Copr build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .copr/Makefile
+      - openchamber.spec
+      - .github/workflows/copr.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    if: >-
+      ${{ secrets.COPR_LOGIN != '' && secrets.COPR_TOKEN != '' &&
+      secrets.COPR_USERNAME != '' }}
+    runs-on: ubuntu-latest
+    container: fedora:44
+
+    steps:
+      - name: Install build dependencies
+        run: dnf --assumeyes install git python3-pip
+
+      - uses: actions/checkout@v4
+
+      - name: Install Copr CLI
+        run: python3 -m pip install copr-cli
+
+      - name: Configure Copr CLI
+        env:
+          COPR_LOGIN: ${{ secrets.COPR_LOGIN }}
+          COPR_TOKEN: ${{ secrets.COPR_TOKEN }}
+          COPR_USERNAME: ${{ secrets.COPR_USERNAME }}
+        run: |
+          mkdir -p ~/.config
+          cat > ~/.config/copr <<EOF
+          [copr-cli]
+          login = $COPR_LOGIN
+          username = $COPR_USERNAME
+          token = $COPR_TOKEN
+          copr_url = https://copr.fedorainfracloud.org
+          EOF
+
+      - name: Create and configure Copr project
+        env:
+          COPR_USERNAME: ${{ secrets.COPR_USERNAME }}
+        run: |
+          project="$COPR_USERNAME/OpenChamber"
+          if ! copr-cli get "$project" >/dev/null 2>&1; then
+            copr-cli create OpenChamber \
+              --description "Source builds of OpenChamber for Fedora"
+          fi
+          copr-cli modify "$project" --chroot fedora-44-x86_64
+
+      - name: Submit Fedora 44 Copr SCM build
+        env:
+          COPR_USERNAME: ${{ secrets.COPR_USERNAME }}
+        run: |
+          copr-cli buildscm "$COPR_USERNAME/OpenChamber" \
+            --clone-url https://github.com/${{ github.repository }}.git \
+            --commit "${{ github.sha }}" \
+            --subdir .copr \
+            --spec ../openchamber.spec \
+            --method make_srpm \
+            --enable-net on \
+            --nowait \
+            -r fedora-44-x86_64

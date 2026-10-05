@@ -1,0 +1,3 @@
+.copr/*.tar.gz
+.copr/*.src.rpm
+.copr/*.rpm
