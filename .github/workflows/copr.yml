@@ -49,6 +49,7 @@ jobs:
           project="$COPR_USERNAME/OpenChamber"
           if ! copr-cli get "$project" >/dev/null 2>&1; then
             copr-cli create OpenChamber \
+              --chroot fedora-44-x86_64 \
               --description "Source builds of OpenChamber for Fedora"
           fi
           copr-cli modify "$project" --chroot fedora-44-x86_64
