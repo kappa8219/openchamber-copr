@@ -15,6 +15,7 @@ BuildRequires:  cpio
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
 BuildRequires:  glibc-devel
+BuildRequires:  libxcrypt-compat
 BuildRequires:  make
 BuildRequires:  nodejs
 BuildRequires:  npm
