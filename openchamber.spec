@@ -4,7 +4,7 @@
 
 Name:           openchamber
 Version:        2.1.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Desktop runtime for OpenChamber
 License:        MIT
 URL:            https://openchamber.dev/
@@ -51,6 +51,7 @@ node --input-type=module -e '
   fs.writeFileSync(path, `${JSON.stringify(packageJson, null, 2)}\n`);
 '
 bun run --cwd packages/electron package -- --linux rpm --x64
+bun run --cwd packages/electron verify:opencode-cli
 
 %install
 export QA_RPATHS=0x12
@@ -59,6 +60,9 @@ rpm2cpio packages/electron/dist/OpenChamber-%{version}-linux-x86_64.rpm | (
     cd "%{buildroot}"
     cpio -idm
 )
+install -Dpm 0755 packages/electron/resources/opencode-cli/opencode \
+    "%{buildroot}/opt/OpenChamber/resources/opencode-cli/opencode"
+"%{buildroot}/opt/OpenChamber/resources/opencode-cli/opencode" --version | grep -Eq '^opencode v2\.'
 find "%{buildroot}" -mindepth 1 -printf '/%%P\n' | sort > %{name}.files
 
 %check
