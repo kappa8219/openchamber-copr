@@ -49,12 +49,19 @@ jobs:
           project="$COPR_USERNAME/OpenChamber"
           if ! copr-cli get "$project" >/dev/null 2>&1; then
             copr-cli create OpenChamber \
+              --chroot fedora-43-x86_64 \
               --chroot fedora-44-x86_64 \
+              --chroot fedora-45-x86_64 \
+              --chroot fedora-rawhide-x86_64 \
               --description "Source builds of OpenChamber for Fedora"
           fi
-          copr-cli modify "$project" --chroot fedora-44-x86_64
+          copr-cli modify "$project" \
+            --chroot fedora-43-x86_64 \
+            --chroot fedora-44-x86_64 \
+            --chroot fedora-45-x86_64 \
+            --chroot fedora-rawhide-x86_64
 
-      - name: Submit Fedora 44 Copr SCM build
+      - name: Submit Fedora Copr SCM builds
         env:
           COPR_USERNAME: ${{ secrets.COPR_USERNAME }}
         run: |
@@ -66,4 +73,7 @@ jobs:
             --method make_srpm \
             --enable-net on \
             --nowait \
-            -r fedora-44-x86_64
+            -r fedora-43-x86_64 \
+            -r fedora-44-x86_64 \
+            -r fedora-45-x86_64 \
+            -r fedora-rawhide-x86_64

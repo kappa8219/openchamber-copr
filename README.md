@@ -1,8 +1,9 @@
 # OpenChamber COPR packaging
 
 This repository builds [OpenChamber](https://github.com/openchamber/openchamber)
-from the upstream `v2.1.1` source tag for Fedora 44 x86_64. The spec installs
-the RPM produced by OpenChamber's Electron build into the final COPR RPM.
+from the upstream `v2.1.1` source tag for Fedora 43, 44, 45, and Rawhide
+x86_64. The spec installs the RPM produced by OpenChamber's Electron build into
+the final COPR RPM.
 
 After the GitHub Actions workflow completes, install it with:
 
@@ -14,8 +15,8 @@ sudo dnf install openchamber
 ## Publishing
 
 The `Copr build` workflow creates the `OpenChamber` COPR project if it is
-missing, then submits an SCM build for `fedora-44-x86_64`. Add these repository
-secrets before triggering the workflow:
+missing, then submits SCM builds for Fedora 43, 44, 45, and Rawhide x86_64.
+Add these repository secrets before triggering the workflow:
 
 - `COPR_LOGIN`
 - `COPR_TOKEN`
