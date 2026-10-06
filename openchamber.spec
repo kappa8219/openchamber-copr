@@ -1,10 +1,11 @@
 %global debug_package %{nil}
 %global bun_version 1.4.2
 %global __requires_exclude_from ^/opt/OpenChamber/resources/app\.asar\.unpacked/.*$
+%global __strip /bin/true
 
 Name:           openchamber
 Version:        2.1.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Desktop runtime for OpenChamber
 License:        MIT
 URL:            https://openchamber.dev/
@@ -54,7 +55,6 @@ bun run --cwd packages/electron package -- --linux rpm --x64
 bun run --cwd packages/electron verify:opencode-cli
 
 %install
-export DONT_STRIP=1
 export QA_RPATHS=0x12
 mkdir -p "%{buildroot}"
 rpm2cpio packages/electron/dist/OpenChamber-%{version}-linux-x86_64.rpm | (
