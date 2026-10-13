@@ -1,5 +1,5 @@
 spec := ../openchamber.spec
-version := 2.1.1
+version := 2.3.1
 source := openchamber-$(version).tar.gz
 source_url := https://github.com/openchamber/openchamber/archive/refs/tags/v$(version).tar.gz
 bun_version := 1.4.2

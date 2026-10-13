@@ -1,7 +1,7 @@
 # OpenChamber COPR packaging
 
 This repository builds [OpenChamber](https://github.com/openchamber/openchamber)
-from the upstream `v2.1.1` source tag for Fedora 43, 44, 45, and Rawhide
+from the upstream `v2.3.1` source tag for Fedora 43, 44, 45, and Rawhide
 x86_64. The spec installs the RPM produced by OpenChamber's Electron build into
 the final COPR RPM.
 
