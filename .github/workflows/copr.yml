@@ -6,7 +6,9 @@ on:
       - main
     paths:
       - .copr/Makefile
+      - .copr-web/Makefile
       - openchamber.spec
+      - openchamber-cli.spec
       - .github/workflows/copr.yml
   workflow_dispatch:
 
@@ -70,6 +72,19 @@ jobs:
             --commit "${{ github.sha }}" \
             --subdir .copr \
             --spec ../openchamber.spec \
+            --method make_srpm \
+            --enable-net on \
+            --nowait \
+            -r fedora-43-x86_64 \
+            -r fedora-44-x86_64 \
+            -r fedora-45-x86_64 \
+            -r fedora-rawhide-x86_64
+
+          copr-cli buildscm "$COPR_USERNAME/OpenChamber" \
+            --clone-url https://github.com/${{ github.repository }}.git \
+            --commit "${{ github.sha }}" \
+            --subdir .copr-web \
+            --spec ../openchamber-cli.spec \
             --method make_srpm \
             --enable-net on \
             --nowait \

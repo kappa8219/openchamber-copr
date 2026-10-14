@@ -1,4 +1,7 @@
-.copr/*.tar.gz
-.copr/*.zip
-.copr/*.src.rpm
 .copr/*.rpm
+.copr/*.src.rpm
+.copr-web/*.tgz
+.copr-web/*.tar.xz
+.copr-web/LICENSE-*
+.copr-web/*.src.rpm
+.copr-web/*.rpm

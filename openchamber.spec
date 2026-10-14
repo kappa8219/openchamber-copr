@@ -1,70 +1,29 @@
 %global debug_package %{nil}
-%global bun_version 1.4.2
 %global __requires_exclude_from ^/opt/OpenChamber/resources/app\.asar\.unpacked/.*$
 %global __strip /bin/true
 
 Name:           openchamber
-Version:        2.1.1
+Version:        2.3.2
 Release:        5%{?dist}
 Summary:        Desktop runtime for OpenChamber
 License:        MIT
 URL:            https://openchamber.dev/
-Source0:        https://github.com/openchamber/openchamber/archive/refs/tags/v%{version}.tar.gz
-Source1:        https://github.com/oven-sh/bun/releases/download/bun-v%{bun_version}/bun-linux-x64.zip
+Source0:        https://github.com/openchamber/openchamber/releases/download/v%{version}/OpenChamber-%{version}-linux-x86_64.rpm
 ExclusiveArch:  x86_64
 
 BuildRequires:  cpio
 BuildRequires:  desktop-file-utils
-BuildRequires:  gcc-c++
-BuildRequires:  glibc-devel
-BuildRequires:  libxcrypt-compat
-BuildRequires:  make
-BuildRequires:  nodejs
-BuildRequires:  npm
-BuildRequires:  python3
 BuildRequires:  rpm
-BuildRequires:  unzip
 
 %description
-OpenChamber is an open-source desktop client for OpenCode.
+OpenChamber desktop application, repackaged from the official upstream RPM.
 
 %prep
-%autosetup -n openchamber-%{version}
-
-%build
-export HOME="%{_builddir}/home"
-export npm_config_cache="%{_builddir}/npm-cache"
-export ELECTRON_BUILDER_CACHE="%{_builddir}/electron-builder-cache"
-export NODE_OPTIONS="--max-old-space-size=4096"
-mkdir -p "$HOME" "$npm_config_cache" "$ELECTRON_BUILDER_CACHE"
-unzip -q %{SOURCE1}
-export PATH="$PWD/bun-linux-x64:$PATH"
-bun --version
-bun install --frozen-lockfile
-bun run build
-node --input-type=module -e '
-  import fs from "node:fs";
-  const path = "packages/electron/package.json";
-  const packageJson = JSON.parse(fs.readFileSync(path, "utf8"));
-  packageJson.homepage = "https://openchamber.dev/";
-  packageJson.author = { name: "OpenChamber COPR", email: "noreply@github.com" };
-  packageJson.build.linux.maintainer = "OpenChamber COPR <noreply@github.com>";
-  fs.writeFileSync(path, `${JSON.stringify(packageJson, null, 2)}\n`);
-'
-bun run --cwd packages/electron package -- --linux rpm --x64
-bun run --cwd packages/electron verify:opencode-cli
+echo "9173183b2c7d2b83568255879f6952866607c5befe93a9c2f9102f30cb931f43  %{SOURCE0}" | sha256sum --check
 
 %install
-export QA_RPATHS=0x12
-mkdir -p "%{buildroot}"
-rpm2cpio packages/electron/dist/OpenChamber-%{version}-linux-x86_64.rpm | (
-    cd "%{buildroot}"
-    cpio -idm
-)
-install -Dpm 0755 packages/electron/resources/opencode-cli/opencode \
-    "%{buildroot}/opt/OpenChamber/resources/opencode-cli/opencode"
-"%{buildroot}/opt/OpenChamber/resources/opencode-cli/opencode" --version | grep -Eq '^opencode v2\.'
-find "%{buildroot}" -mindepth 1 -printf '/%%P\n' | sort > %{name}.files
+rpm2cpio %{SOURCE0} | cpio --extract --make-directories --quiet --directory %{buildroot}
+find %{buildroot} -mindepth 1 -printf '/%%P\n' | sort > %{name}.files
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/openchamber.desktop

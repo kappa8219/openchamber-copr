@@ -1,0 +1,72 @@
+%global debug_package %{nil}
+%global __strip /bin/true
+%global __provides_exclude_from ^/usr/lib/openchamber-web/node_modules/.*$
+%global __requires_exclude_from ^/usr/lib/openchamber-web/node_modules/.*$
+%global __requires_exclude ^/usr/bin/(node|pwsh|python3)$
+%global node_version 24.14.0
+
+Name:           openchamber-cli
+Version:        2.3.2
+Release:        1%{?dist}
+Summary:        OpenChamber Web Server and CLI
+License:        MIT
+URL:            https://openchamber.dev/
+Source0:        https://github.com/openchamber/openchamber/releases/download/v%{version}/openchamber-web-%{version}.tgz
+Source1:        https://nodejs.org/dist/v%{node_version}/node-v%{node_version}-linux-x64.tar.xz
+Source2:        LICENSE-%{version}
+ExclusiveArch:  x86_64
+
+BuildRequires:  tar
+BuildRequires:  xz
+
+%description
+OpenChamber Web Server and CLI for running OpenChamber on a workstation or
+server. This package provides the openchamber-cli command, including API-only and
+LAN server modes.
+
+%prep
+echo "bb4daf55bc59350a4327458b6d2765a9456d47cdea2e40e2877584cd61e5a16c  %{SOURCE0}" | sha256sum --check
+echo "41cd79bb7877c81605a9e68ec4c91547774f46a40c67a17e34d7179ef11729df  %{SOURCE1}" | sha256sum --check
+mkdir -p package
+tar -xzf %{SOURCE0} --strip-components=1 -C package
+tar -xJf %{SOURCE1}
+
+%build
+export PATH="$PWD/node-v%{node_version}-linux-x64/bin:$PATH"
+cd package
+npm install --omit=dev --ignore-scripts --no-audit --no-fund
+
+%install
+export QA_RPATHS=0x12
+mkdir -p %{buildroot}%{_prefix}/lib/openchamber-web
+mkdir -p %{buildroot}%{_bindir}
+cp -a package/. %{buildroot}%{_prefix}/lib/openchamber-web/
+mkdir -p %{buildroot}%{_prefix}/lib/openchamber-web/runtime
+cp -a node-v%{node_version}-linux-x64 \
+    %{buildroot}%{_prefix}/lib/openchamber-web/runtime/
+install -Dpm 0644 %{SOURCE2} \
+    %{buildroot}%{_datadir}/licenses/%{name}/LICENSE
+
+cat > %{buildroot}%{_bindir}/openchamber-cli <<'EOF'
+#!/bin/sh
+ROOT=/usr/lib/openchamber-web
+export PATH="$ROOT/runtime/node-v%{node_version}-linux-x64/bin:$PATH"
+exec node "$ROOT/bin/cli.js" "$@"
+EOF
+chmod 0755 %{buildroot}%{_bindir}/openchamber-cli
+
+find %{buildroot} -mindepth 1 \
+    ! -path '%{buildroot}%{_datadir}/licenses/%{name}/LICENSE' \
+    -printf '/%%P\n' | sort -u > %{name}.files
+
+%check
+NODE=%{buildroot}%{_prefix}/lib/openchamber-web/runtime/node-v%{node_version}-linux-x64/bin/node
+"$NODE" %{buildroot}%{_prefix}/lib/openchamber-web/bin/cli.js --version | grep -Fx '%{version}'
+"$NODE" %{buildroot}%{_prefix}/lib/openchamber-web/bin/cli.js --help >/dev/null
+
+%files -f %{name}.files
+%license %{_datadir}/licenses/%{name}/LICENSE
+
+%changelog
+* Wed Oct 14 2026 OpenChamber COPR <noreply@github.com> - 2.3.2-1
+- Package the official OpenChamber web CLI tarball with its declared Node runtime
