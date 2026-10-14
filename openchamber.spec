@@ -4,7 +4,7 @@
 
 Name:           openchamber
 Version:        2.3.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Desktop runtime for OpenChamber
 License:        MIT
 URL:            https://openchamber.dev/
@@ -24,7 +24,7 @@ echo "9173183b2c7d2b83568255879f6952866607c5befe93a9c2f9102f30cb931f43  %{SOURCE
 %install
 export QA_RPATHS=0x12
 rpm2cpio %{SOURCE0} | cpio --extract --make-directories --quiet --directory %{buildroot}
-find %{buildroot} -mindepth 1 -printf '/%%P\n' | sort > %{name}.files
+find %{buildroot} -mindepth 1 \( -type f -o -type l \) -printf '/%%P\n' | sort > %{name}.files
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/openchamber.desktop
@@ -32,6 +32,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/openchamber.desktop
 %files -f %{name}.files
 
 %changelog
+* Wed Oct 14 2026 OpenChamber COPR <noreply@github.com> - 2.3.2-2
+- Exclude shared system directories from the package file list
+
 * Wed Oct 14 2026 OpenChamber COPR <noreply@github.com> - 2.3.2-1
 - Repackage the official upstream desktop RPM
 

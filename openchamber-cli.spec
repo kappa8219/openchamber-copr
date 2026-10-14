@@ -7,7 +7,7 @@
 
 Name:           openchamber-cli
 Version:        2.3.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        OpenChamber Web Server and CLI
 License:        MIT
 URL:            https://openchamber.dev/
@@ -55,7 +55,7 @@ exec node "$ROOT/bin/cli.js" "$@"
 EOF
 chmod 0755 %{buildroot}%{_bindir}/openchamber-cli
 
-find %{buildroot} -mindepth 1 \
+find %{buildroot} -mindepth 1 \( -type f -o -type l \) \
     ! -path '%{buildroot}%{_datadir}/licenses/%{name}/LICENSE' \
     -printf '/%%P\n' | sort -u > %{name}.files
 
@@ -68,5 +68,8 @@ NODE=%{buildroot}%{_prefix}/lib/openchamber-web/runtime/node-v%{node_version}-li
 %license %{_datadir}/licenses/%{name}/LICENSE
 
 %changelog
+* Wed Oct 14 2026 OpenChamber COPR <noreply@github.com> - 2.3.2-2
+- Exclude shared system directories from the package file list
+
 * Wed Oct 14 2026 OpenChamber COPR <noreply@github.com> - 2.3.2-1
 - Package the official OpenChamber web CLI tarball with its declared Node runtime
