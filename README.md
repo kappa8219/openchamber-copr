@@ -1,6 +1,6 @@
 # OpenChamber COPR packaging
 
-This repository publishes two x86_64 packages from OpenChamber v2.3.2 to the
+This repository publishes two x86_64 packages from OpenChamber to the
 `OpenChamber` COPR project:
 
 - `openchamber` repackages the official OpenChamber desktop RPM from GitHub
@@ -30,22 +30,3 @@ openchamber-cli serve --api-only --port 3000 --lan --ui-password 'choose-a-passw
 The CLI package bundles Node.js 24.14.0, so it does not use the host's Node.js
 22. OpenCode itself is not bundled with this web CLI; install the OpenCode CLI
 separately and ensure it is available on `PATH`.
-
-## Publishing
-
-The GitHub Actions workflow submits two SCM builds to the same COPR project,
-using `.copr/Makefile` for the official desktop RPM and `.copr-web/Makefile` for
-the web tarball and Node.js runtime. Configure these repository secrets:
-
-- `COPR_LOGIN`
-- `COPR_TOKEN`
-- `COPR_USERNAME` (normally `ok8219`)
-
-Create the token at <https://copr.fedorainfracloud.org/api/>. The token user
-must be permitted to manage the `OpenChamber` COPR project.
-
-## Updating OpenChamber
-
-Update release versions, source URLs, and SHA-256 checksums in both spec files
-and their corresponding Makefiles. The web package's Node runtime version must
-meet the `engines.node` requirement in the released `@openchamber/web` package.
