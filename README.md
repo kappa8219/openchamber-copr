@@ -34,8 +34,9 @@ separately and ensure it is available on `PATH`.
 ## Publishing
 
 The GitHub Actions workflow submits two SCM builds to the same COPR project,
-using `.copr/Makefile` for the official desktop RPM and `.copr-web/Makefile` for
-the web tarball and Node.js runtime. Configure these repository secrets:
+using `.copr/Makefile` for both packages. It downloads the official desktop RPM
+or, for the CLI build, the web tarball and Node.js runtime. Configure these
+repository secrets:
 
 - `COPR_LOGIN`
 - `COPR_TOKEN`

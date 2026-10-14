@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - .copr/Makefile
-      - .copr-web/Makefile
+      - .copr-web/README.md
       - openchamber.spec
       - openchamber-cli.spec
       - .github/workflows/copr.yml

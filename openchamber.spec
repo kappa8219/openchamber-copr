@@ -22,6 +22,7 @@ OpenChamber desktop application, repackaged from the official upstream RPM.
 echo "9173183b2c7d2b83568255879f6952866607c5befe93a9c2f9102f30cb931f43  %{SOURCE0}" | sha256sum --check
 
 %install
+export QA_RPATHS=0x12
 rpm2cpio %{SOURCE0} | cpio --extract --make-directories --quiet --directory %{buildroot}
 find %{buildroot} -mindepth 1 -printf '/%%P\n' | sort > %{name}.files
 
