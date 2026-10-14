@@ -1,6 +1,7 @@
 # OpenChamber COPR packaging
 
-This repository publishes two x86_64 packages to the `OpenChamber` COPR project:
+This repository publishes two x86_64 packages from OpenChamber v2.3.2 to the
+`OpenChamber` COPR project:
 
 - `openchamber` repackages the official OpenChamber desktop RPM from GitHub
   Releases and verifies its SHA-256 checksum. Its original GUI launcher remains

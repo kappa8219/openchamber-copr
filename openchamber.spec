@@ -4,7 +4,7 @@
 
 Name:           openchamber
 Version:        2.3.2
-Release:        5%{?dist}
+Release:        1%{?dist}
 Summary:        Desktop runtime for OpenChamber
 License:        MIT
 URL:            https://openchamber.dev/
@@ -31,3 +31,15 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/openchamber.desktop
 %files -f %{name}.files
 
 %changelog
+* Wed Oct 14 2026 OpenChamber COPR <noreply@github.com> - 2.3.2-1
+- Repackage the official upstream desktop RPM
+
+* Tue Oct 13 2026 OK <o.kraievyi@gmail.com> - 2.3.1-1
+- Update to 2.3.1
+- Mobile: start a session from Shortcuts and Siri on iOS 18
+- Antigravity card with 5-hour and weekly limits
+- "View repository on GitHub/GitLab" in repository menu
+- Configure panels: drag to reorder in the rail
+- Fix mobile connect/drop/reconnect loop on slow servers
+- Fix GitHub PR actions in unlinked repositories
+- Many other fixes and improvements
