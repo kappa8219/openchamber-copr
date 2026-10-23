@@ -7,7 +7,7 @@ This repository publishes two x86_64 packages from OpenChamber to the
   Releases and verifies its SHA-256 checksum. Its original GUI launcher remains
   `/usr/bin/openchamber`.
 - `openchamber-cli` packages the official `openchamber-web` release tarball,
-  installs its production dependencies, and bundles Node.js 24.14.0. It provides
+  installs its production dependencies, and bundles Node.js 24.22.1. It provides
   the separate `/usr/bin/openchamber-cli` command, so the server can run
   headlessly and does not depend on the host's Node version.
 
@@ -27,6 +27,6 @@ sudo dnf install openchamber-cli
 openchamber-cli serve --api-only --port 3000 --lan --ui-password 'choose-a-password'
 ```
 
-The CLI package bundles Node.js 24.14.0, so it does not use the host's Node.js
+The CLI package bundles Node.js 24.22.1, so it does not use the host's Node.js
 22. OpenCode itself is not bundled with this web CLI; install the OpenCode CLI
 separately and ensure it is available on `PATH`.
