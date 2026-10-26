@@ -1,5 +1,5 @@
 spec ?= ../openchamber.spec
-version := 2.5.1
+version := 2.5.2
 node_version := 24.22.1
 node_source := node-v$(node_version)-linux-x64.tar.xz
 license_source := LICENSE-$(version)
