@@ -6,7 +6,7 @@
 %global node_version 24.22.3
 
 Name:           openchamber-cli
-Version:        2.7.1
+Version:        2.7.2
 Release:        1%{?dist}
 Summary:        OpenChamber Web Server and CLI
 License:        MIT
@@ -25,7 +25,7 @@ server. This package provides the openchamber-cli command, including API-only an
 LAN server modes.
 
 %prep
-echo "ec1cc259a2546a3ad9ab80c9f61b7730205f8f21f01381a8d983c55ff0a58399  %{SOURCE0}" | sha256sum --check
+echo "85024d82022c6471a114a38b4aeb74c14603af96d05d9dbb7bd3a017d35687c6  %{SOURCE0}" | sha256sum --check
 echo "4f2b175a6d53a5c617a80dba2676238a0688cef28c6da4eba35c7d844e66fcfb  %{SOURCE1}" | sha256sum --check
 mkdir -p package
 tar -xzf %{SOURCE0} --strip-components=1 -C package
@@ -69,6 +69,9 @@ NODE=%{buildroot}%{_prefix}/lib/openchamber-web/runtime/node-v%{node_version}-li
 %license %{_datadir}/licenses/%{name}/LICENSE
 
 %changelog
+* Mon Nov 16 2026 OpenChamber COPR <noreply@github.com> - 2.7.2-1
+- Update web CLI to v2.7.2; keep bundled Node.js 24.22.3
+
 * Fri Nov 13 2026 OpenChamber COPR <noreply@github.com> - 2.7.1-1
 - Update web CLI to v2.7.1; keep bundled Node.js 24.22.3
 +

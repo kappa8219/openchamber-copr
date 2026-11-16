@@ -1,0 +1,37 @@
+name: Check upstream OpenChamber release
+
+on:
+  schedule:
+    - cron: "23 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check latest stable release and update packaging
+        id: update
+        run: python3 .github/scripts/update_upstream.py | tee -a "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Open or update release PR
+        if: steps.update.outputs.updated == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/openchamber-upstream-release
+          delete-branch: true
+          commit-message: "Update OpenChamber to ${{ steps.update.outputs.version }}"
+          title: "Update OpenChamber to ${{ steps.update.outputs.version }}"
+          body: |
+            Update the desktop and web/CLI packages to the latest stable OpenChamber release.
+
+            Upstream release: ${{ steps.update.outputs.release_url }}
+
+            Source RPM checksums are calculated from the release assets. The existing COPR workflow will build both packages after this PR is merged.
