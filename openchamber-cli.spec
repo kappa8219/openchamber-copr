@@ -51,7 +51,7 @@ cat > %{buildroot}%{_bindir}/openchamber-cli <<'EOF'
 #!/bin/sh
 ROOT=/usr/lib/openchamber-web
 export PATH="$ROOT/runtime/node-v%{node_version}-linux-x64/bin:$PATH"
-exec node "$ROOT/bin/cli.js" "$@"
+exec node "$ROOT/build/bin/cli.js" "$@"
 EOF
 chmod 0755 %{buildroot}%{_bindir}/openchamber-cli
 
@@ -62,15 +62,15 @@ find %{buildroot} -mindepth 1 \( -type f -o -type l \) \
 %check
 NODE=%{buildroot}%{_prefix}/lib/openchamber-web/runtime/node-v%{node_version}-linux-x64/bin/node
 "$NODE" --version | grep -Fx 'v%{node_version}'
-"$NODE" %{buildroot}%{_prefix}/lib/openchamber-web/bin/cli.js --version | grep -Fx '%{version}'
-"$NODE" %{buildroot}%{_prefix}/lib/openchamber-web/bin/cli.js --help >/dev/null
+"$NODE" %{buildroot}%{_prefix}/lib/openchamber-web/build/bin/cli.js --version | grep -Fx '%{version}'
+"$NODE" %{buildroot}%{_prefix}/lib/openchamber-web/build/bin/cli.js --help >/dev/null
 
 %files -f %{name}.files
 %license %{_datadir}/licenses/%{name}/LICENSE
 
 %changelog
 * Fri Nov 20 2026 OpenChamber COPR <noreply@github.com> - 2.7.3-1
-- Update web CLI to v2.7.3; keep bundled Node.js 24.22.3
+- Update web CLI to v2.7.3, use build/bin/cli.js, and keep bundled Node.js 24.22.3
 
 * Mon Nov 16 2026 OpenChamber COPR <noreply@github.com> - 2.7.2-1
 - Update web CLI to v2.7.2; keep bundled Node.js 24.22.3
