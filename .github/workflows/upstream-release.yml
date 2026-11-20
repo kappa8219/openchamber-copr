@@ -3,7 +3,7 @@ name: Check upstream OpenChamber release
 on:
   schedule:
     - cron: "23 9 * * *"
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 permissions:
   contents: write
