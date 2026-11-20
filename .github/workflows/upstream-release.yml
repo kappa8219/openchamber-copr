@@ -20,6 +20,8 @@ jobs:
         id: update
         run: python3 .github/scripts/update_upstream.py | tee -a "$GITHUB_OUTPUT"
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Open or update release PR
         if: steps.update.outputs.updated == 'true'

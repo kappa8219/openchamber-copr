@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import sys
 from datetime import datetime, timezone
@@ -22,7 +23,11 @@ ASSET_NAMES = (
 
 
 def request(url: str):
-    req = Request(url, headers={"User-Agent": "openchamber-copr-release-check"})
+    headers = {"User-Agent": "openchamber-copr-release-check"}
+    token = os.environ.get("GITHUB_TOKEN")
+    if token and url.startswith("https://api.github.com/"):
+        headers["Authorization"] = f"Bearer {token}"
+    req = Request(url, headers=headers)
     return urlopen(req, timeout=120)
 
 
