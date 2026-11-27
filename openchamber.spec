@@ -3,7 +3,7 @@
 %global __strip /bin/true
 
 Name:           openchamber
-Version:        2.8.0
+Version:        2.8.1
 Release:        1%{?dist}
 Summary:        Desktop runtime for OpenChamber
 License:        MIT
@@ -19,7 +19,7 @@ BuildRequires:  rpm
 OpenChamber desktop application, repackaged from the official upstream RPM.
 
 %prep
-echo "772ee68f7bc364b266cc45e1ac85d9f89a98e3733327837e6904563b8aa62f53  %{SOURCE0}" | sha256sum --check
+echo "f9b84d344a6a5b38eade8f5f2e39578208b3cfceca93c7ed142bbe813d69a640  %{SOURCE0}" | sha256sum --check
 
 %install
 export QA_RPATHS=0x12
@@ -32,6 +32,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/openchamber.desktop
 %files -f %{name}.files
 
 %changelog
+* Fri Nov 27 2026 OpenChamber COPR <noreply@github.com> - 2.8.1-1
+- Update to OpenChamber 2.8.1
+
 * Sun Nov 22 2026 OpenChamber COPR <noreply@github.com> - 2.8.0-1
 - Update to OpenChamber 2.8.0
 
