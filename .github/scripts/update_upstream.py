@@ -138,7 +138,7 @@ def main() -> int:
     )
     cli_entry = (
         f"* {date} OpenChamber COPR <noreply@github.com> - {version}-1\n"
-        f"- Update web CLI to v{version}; keep bundled Node.js 24.22.3\n\n"
+        f"- Update web CLI to v{version}; run on system Node.js 24 (nodejs24)\n\n"
     )
     desktop_spec = replace_once(
         desktop_spec,
