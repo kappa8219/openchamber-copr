@@ -2,11 +2,11 @@
 %global __strip /bin/true
 %global __provides_exclude_from ^/usr/lib/openchamber-web/node_modules/.*$
 %global __requires_exclude_from ^/usr/lib/openchamber-web/node_modules/.*$
-%global __requires_exclude ^/usr/bin/(pwsh|python3)$
+%global __requires_exclude ^/usr/bin/(node|pwsh|python3)$
 
 Name:           openchamber-cli
 Version:        2.8.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        OpenChamber Web Server and CLI
 License:        MIT
 URL:            https://openchamber.dev/
@@ -34,7 +34,9 @@ tar -xzf %{SOURCE0} --strip-components=1 -C package
 
 %build
 cd package
-npm install --omit=dev --ignore-scripts --no-audit --no-fund
+# nodejs24-npm ships npm-24 only on Fedora 43 and /usr/bin/npm on 44+;
+# invoke the versioned npm library through node-24 on every release
+node-24 /usr/lib/node_modules_24/npm/bin/npm-cli.js install --omit=dev --ignore-scripts --no-audit --no-fund
 
 %install
 export QA_RPATHS=0x12
@@ -63,6 +65,13 @@ node-24 %{buildroot}%{_prefix}/lib/openchamber-web/build/bin/cli.js --help >/dev
 %license %{_datadir}/licenses/%{name}/LICENSE
 
 %changelog
+* Fri Nov 27 2026 OpenChamber COPR <noreply@github.com> - 2.8.1-2
+- Fix Fedora 43 build: invoke npm via node-24 and the versioned
+  /usr/lib/node_modules_24 path (nodejs24-npm ships no unversioned
+  npm there)
+- Keep excluding /usr/bin/node from auto-generated requires (the
+  bin/cli.js env shebang); nodejs24 provides /usr/bin/node-24
+
 * Fri Nov 27 2026 OpenChamber COPR <noreply@github.com> - 2.8.1-1
 - Update web CLI to v2.8.1
 - Drop the bundled Node.js tarball; require Fedora's nodejs24 (Node.js 24.14+)
